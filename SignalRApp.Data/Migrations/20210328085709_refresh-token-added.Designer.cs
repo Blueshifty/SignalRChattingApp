@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using SignalRApp.Data.EntityFramework;
@@ -9,9 +10,10 @@ using SignalRApp.Data.EntityFramework;
 namespace SignalRApp.Data.Migrations
 {
     [DbContext(typeof(SignalRAppDbContext))]
-    partial class SignalRAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210328085709_refresh-token-added")]
+    partial class refreshtokenadded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

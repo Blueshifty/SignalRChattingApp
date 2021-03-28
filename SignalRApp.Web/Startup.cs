@@ -33,7 +33,8 @@ namespace SignalRApp
             services.AddCors(o => o.AddPolicy("AllowAll", p =>
                 p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().SetPreflightMaxAge(TimeSpan.FromSeconds(86400))));
 
-
+            services.AddHttpContextAccessor();
+            
             services.AddMySingleton();
             services.AddMyScoped();
             services.AddMyTransient();

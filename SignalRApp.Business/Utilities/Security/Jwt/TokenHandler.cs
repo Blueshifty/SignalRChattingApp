@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -28,7 +29,7 @@ namespace SignalRApp.Business.Utilities.Security.Jwt
 
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
-            tokenInstance.Expiration = DateTime.Now.AddMinutes(5);
+            tokenInstance.Expiration = DateTime.Now.AddHours(1);
 
             var securityToken = new JwtSecurityToken(
                 issuer: Configuration["Token:Issuer"],

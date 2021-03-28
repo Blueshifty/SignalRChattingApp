@@ -1,6 +1,6 @@
 Vue.config.devtools = true;
 
-var vue = new Vue({
+const vue = new Vue({
     el: "#vue-wrapper",
     delimiters: ["${", "}}"],
     data: {
@@ -54,7 +54,7 @@ var vue = new Vue({
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl("https://localhost:5001/chatHub",
                     {accessTokenFactory: () => sessionStorage.getItem("token")})
-                .configureLogging(signalR.LogLevel.Trace)
+                .configureLogging(signalR.LogLevel.Information)
                 .build();
 
             this.initializeSignalRMethods();
@@ -81,7 +81,6 @@ var vue = new Vue({
         },
         roomActions(action, room) {
             this.connection.invoke(action, room).then(response => {
-                console.log(action, response);
                 switch (action) {
                     case 'CreateRoom':
                         let modal = new bootstrap.Modal(document.getElementById('roomModal'));

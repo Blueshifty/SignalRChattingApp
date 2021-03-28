@@ -5,9 +5,10 @@ using SignalRApp.Business.Utilities.Security.Jwt;
 
 namespace SignalRApp.Business.Services.Abstract
 {
-    public interface IUserService
+    public interface IAuthService
     {
         Task<DataResult<Token>> Register(RegisterDto registerDto);
         Task<DataResult<Token>> Login(LoginDto loginDto);
+        Task<DataResult<Token>> RefreshToken(string refreshToken);
     }
 }

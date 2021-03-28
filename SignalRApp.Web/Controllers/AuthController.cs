@@ -11,23 +11,29 @@ namespace SignalRApp.Controllers
     [Route("api/[controller]/[action]")]
     public class AuthController
     {
-        private readonly IUserService _userService;
+        private readonly IAuthService _authService;
 
-        public AuthController(IUserService userService)
+        public AuthController(IAuthService authService)
         {
-            _userService = userService;
+            _authService = authService;
         }
 
         [HttpPost]
         public async Task<ActionResult> Login([FromBody] LoginDto loginDto)
         {
-            return ResponseCreator.CreateDataResponse(await _userService.Login(loginDto));
+            return ResponseCreator.CreateDataResponse(await _authService.Login(loginDto));
         }
 
         [HttpPost]
         public async Task<ActionResult> Register([FromBody] RegisterDto registerDto)
         {
-            return ResponseCreator.CreateDataResponse(await _userService.Register(registerDto));
+            return ResponseCreator.CreateDataResponse(await _authService.Register(registerDto));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> RefreshToken(string token)
+        {
+            return ResponseCreator.CreateDataResponse(await _authService.RefreshToken(token));
         }
 
         [Authorize]

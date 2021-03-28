@@ -8,7 +8,7 @@ namespace SignalRApp.Extensions
     {
         public static IServiceCollection AddMyScoped(this IServiceCollection serviceCollection)
         {
-            serviceCollection.AddScoped<IUserService, UserService>();
+            serviceCollection.AddScoped<IAuthService, AuthService>();
             return serviceCollection;
         }
     }
