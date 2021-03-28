@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link href="lib/bootstrap-5.0.0-beta3-dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="css/style.css" rel="stylesheet"/>
+    <script src="lib/bootstrap-5.0.0-beta3-dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/vue/vue.min.js"></script>
+    <script src="lib/signalr/signalr.js"></script>
+    <script src="lib/axios//axios.min.js"></script>
+    <title>Basic SignalR Client</title>
+</head>
+<body>
+<div class="p-2 mt-5" id="vue-wrapper">
+    <div style="max-width: 500px;" class="mx-auto my-auto" v-if="viewState=='login'">
+        <div class="card mx-auto mt-5">
+            <div class="card-header text-center">
+                <h5>Login or Register</h5>
+            </div>
+            <div class="card-body px-4 text-center">
+                <div class="m-2 text-center">
+                    ${errorMessage}}
+                </div>
+                <input class="form-control mt-2" type="text" v-model="userName" placeholder="UserName"/>
+                <input class="form-control mt-2" type="password" v-model="password" placeholder="Password"/>
+                <button class="btn btn-success mt-3" v-on:click="loginRegister(true)">
+                    Login
+                </button>
+                <button class="btn btn-primary mt-3 ml-2" v-on:click="loginRegister(false)">
+                    Register
+                </button>
+            </div>
+        </div>
+    </div>
+    <div class="mx-auto mt-2" v-if="viewState=='dashboard'">
+        <div class="row">
+            <div class="col-xl-8 col-lg-10 col-12 mx-auto">
+                <div class="row mx-3">
+                    <div class="col-xl-12 col-lg-12 col-12 border p-4 d-flex">
+                        <button class="btn btn-primary">Explore Rooms</button>
+                        <button class="btn btn-success ms-auto" type="button" data-bs-toggle="modal"
+                                data-bs-target="#roomModal">Create
+                            Chat Room
+                        </button>
+                    </div>
+                    <div class="col-xl-2 col-lg-3 col-4 p-0 border" style="height: 60vh;">
+                        <div class="border p-2 text-center " v-for="room in rooms">
+                            <span :class="room.name == currentRoom ? 'text-success' : ''"
+                                  v-on:click="roomActions('Join', room.name)" class="clickable">${room.name}}</span>
+                        </div>
+                    </div>
+                    <div class="col-xl-10 col-lg-9 col-8 border p-0" style="height: 60vh;">
+                        <div class="mb-auto" style="height: 50vh; overflow-y: auto;">
+                            <div v-for="message in messages" class="border p-1 m-1">
+                                <span class="text-muted">Content:</span> <span class="ml-1 text-info">${message.message}}</span>
+                                <br>
+                                <span class="text-muted">Date:</span> <span class="ml-1 text-warning"></span>
+                                ${message.createdAt}}
+                                <span class="text-muted">Author:</span> <span class="ml-1 text-danger">${message.author.userName}}</span>
+                            </div>
+                        </div>
+                        <div class="mt-auto d-flex" v-if="currentRoom != null" style="height: 10vh; ">
+                            <input class="form-control mt-2 w-75" type="text" v-model="newMessage"
+                                   placeholder="Message"/>
+                            <button class="btn btn-warning w-25" v-on:click="sendMessage()">Send</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Create Room Modal -->
+    <div class="modal fade" id="roomModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Create Room</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input class="form-control mt-2" type="text" v-model="newRoomName" placeholder="Room Name"/>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times-circle mr-1"></i>Close
+                    </button>
+                    <button class="btn btn-outline-success" v-on:click="roomActions('CreateRoom', newRoomName)">
+                        <i class="fas fa-paper-plane mr-1"></i>Create room
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="js/app.js"></script>
+</html>
