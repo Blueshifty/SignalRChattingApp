@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Text.Json.Serialization;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -29,14 +30,9 @@ namespace SignalRApp
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options => options.AddPolicy("CorsPolicy",
-                builder =>
-                {
-                    builder.AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .AllowCredentials()
-                        .SetIsOriginAllowed((host) => true);
-                }));
+            services.AddCors(o => o.AddPolicy("AllowAll", p =>
+                p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().SetPreflightMaxAge(TimeSpan.FromSeconds(86400))));
+
 
             services.AddMySingleton();
             services.AddMyScoped();
@@ -60,6 +56,21 @@ namespace SignalRApp
                         new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:SecurityKey"])),
                     ClockSkew = TimeSpan.Zero
                 };
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+                        if (!string.IsNullOrEmpty(accessToken) &&
+                            (path.StartsWithSegments("/chatHub")))
+                        {
+                            context.Token = accessToken;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddSwaggerGen(options =>
@@ -77,8 +88,6 @@ namespace SignalRApp
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors("CorsPolicy");
-
             app.UseRouting();
             app.UseHttpsRedirection();
 
@@ -93,7 +102,6 @@ namespace SignalRApp
                 o.RoutePrefix = "swagger";
                 o.SwaggerEndpoint("/swagger/v01/swagger.json", "Second Hand Game v0.1");
             });
-
 
             app.UseStaticFiles();
 

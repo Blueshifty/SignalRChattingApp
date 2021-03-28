@@ -54,7 +54,7 @@ var vue = new Vue({
             this.connection = new signalR.HubConnectionBuilder()
                 .withUrl("https://localhost:5001/chatHub",
                     {accessTokenFactory: () => sessionStorage.getItem("token")})
-                .configureLogging(signalR.LogLevel.Information)
+                .configureLogging(signalR.LogLevel.Trace)
                 .build();
 
             this.initializeSignalRMethods();
