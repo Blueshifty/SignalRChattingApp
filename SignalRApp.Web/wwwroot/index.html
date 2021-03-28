@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="col-xl-10 col-lg-9 col-8 border p-0" style="height: 60vh;">
-                        <div class="mb-auto" style="height: 50vh; overflow-y: auto;">
+                        <div style="height: 90%; overflow-y: auto;">
                             <div v-for="message in messages" class="border p-1 m-1">
                                 <span class="text-muted">Content:</span> <span class="ml-1 text-info">${message.message}}</span>
                                 <br>
@@ -60,10 +60,12 @@
                                 <span class="text-muted">Author:</span> <span class="ml-1 text-danger">${message.author.userName}}</span>
                             </div>
                         </div>
-                        <div class="mt-auto d-flex" v-if="currentRoom != null" style="height: 10vh; ">
-                            <input class="form-control mt-2 w-75" type="text" v-model="newMessage"
-                                   placeholder="Message"/>
-                            <button class="btn btn-warning w-25" v-on:click="sendMessage()">Send</button>
+                        <div class="input-group mt-auto" style="height: 10%">
+                            <input v-model="newMessage" type="text" class="form-control"  placeholder="Message" aria-label="Message"
+                                   aria-describedby="message">
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-primary h-100" type="button" v-on:click="sendMessage()">Send</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -83,10 +85,10 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                        <i class="fas fa-times-circle mr-1"></i>Close
+                        Close
                     </button>
                     <button class="btn btn-outline-success" v-on:click="roomActions('CreateRoom', newRoomName)">
-                        <i class="fas fa-paper-plane mr-1"></i>Create room
+                        Create room
                     </button>
                 </div>
             </div>
